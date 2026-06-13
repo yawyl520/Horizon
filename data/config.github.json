@@ -1,12 +1,12 @@
 {
   "version": "1.0",
   "ai": {
-    "provider": "openai",
-    "model": "gpt-4",
-    "api_key_env": "OPENAI_API_KEY",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "api_key_env": "DEEPSEEK_API_KEY",
     "temperature": 0.3,
     "max_tokens": 4096,
-    "throttle_sec": 0,
+    "throttle_sec": 1,
     "analysis_concurrency": 1,
     "enrichment_concurrency": 1
   },
@@ -16,7 +16,7 @@
     "smtp_port": 465,
     "imap_server": "imap.qq.com",
     "imap_port": 993,
-    "email_address": "xxx@qq.com",
+    "email_address": "",
     "sender_name": "Horizon Daily",
     "subscribe_keyword": "SUBSCRIBE",
     "unsubscribe_keyword": "UNSUBSCRIBE"
@@ -24,23 +24,51 @@
   "sources": {
     "github": [
       {
-        "type": "user_events",
-        "username": "torvalds",
-        "enabled": true
+        "type": "repo_releases",
+        "owner": "openai",
+        "repo": "openai-python",
+        "enabled": true,
+        "category": "ai-tools"
+      },
+      {
+        "type": "repo_releases",
+        "owner": "anthropics",
+        "repo": "anthropic-sdk-python",
+        "enabled": true,
+        "category": "ai-tools"
       },
       {
         "type": "repo_releases",
         "owner": "astral-sh",
         "repo": "uv",
-        "enabled": true
+        "enabled": true,
+        "category": "dev-tools"
       }
     ],
     "hackernews": {
       "enabled": true,
       "fetch_top_stories": 20,
-      "min_score": 100
+      "min_score": 120
     },
     "rss": [
+      {
+        "name": "OpenAI Blog",
+        "url": "https://openai.com/news/rss.xml",
+        "enabled": true,
+        "category": "ai-news"
+      },
+      {
+        "name": "Anthropic News",
+        "url": "https://www.anthropic.com/news/rss.xml",
+        "enabled": true,
+        "category": "ai-news"
+      },
+      {
+        "name": "Google AI Blog",
+        "url": "https://blog.google/technology/ai/rss/",
+        "enabled": true,
+        "category": "ai-news"
+      },
       {
         "name": "Simon Willison",
         "url": "https://simonwillison.net/atom/everything/",
@@ -48,37 +76,46 @@
         "category": "ai-tools"
       },
       {
-        "name": "LWN.net (subscriber full-text)",
-        "url": "https://lwn.net/headlines/full_text?key=${LWN_KEY}",
-        "enabled": false,
-        "category": "linux"
+        "name": "Hugging Face Blog",
+        "url": "https://huggingface.co/blog/feed.xml",
+        "enabled": true,
+        "category": "ai-tools"
+      },
+      {
+        "name": "The Pragmatic Engineer",
+        "url": "https://blog.pragmaticengineer.com/rss/",
+        "enabled": true,
+        "category": "software-engineering"
       }
     ],
     "reddit": {
       "enabled": true,
       "subreddits": [
         {
+          "subreddit": "LocalLLaMA",
+          "enabled": true,
+          "sort": "hot",
+          "time_filter": "day",
+          "fetch_limit": 10,
+          "min_score": 80,
+          "category": "ai-tools"
+        },
+        {
           "subreddit": "MachineLearning",
           "enabled": true,
           "sort": "hot",
           "time_filter": "day",
-          "fetch_limit": 15,
-          "min_score": 50
+          "fetch_limit": 10,
+          "min_score": 80,
+          "category": "machine-learning"
         }
       ],
-      "users": [
-        {
-          "username": "iamthatis",
-          "enabled": true,
-          "sort": "new",
-          "fetch_limit": 10
-        }
-      ],
-      "fetch_comments": 5
+      "users": [],
+      "fetch_comments": 3
     },
     "twitter": {
       "enabled": false,
-      "users": ["karpathy", "ylecun"],
+      "users": [],
       "fetch_limit": 10,
       "fetch_reply_text": false,
       "max_replies_per_tweet": 3,
@@ -89,33 +126,33 @@
       "enabled": false,
       "fetch_filings": false,
       "filings_provider": "sec",
-      "watchlists": [
-        {
-          "name": "megacaps",
-          "enabled": true,
-          "provider": "yfinance",
-          "fetch_limit": 20,
-          "category": "equities",
-          "symbols": ["AAPL", "MSFT", "NVDA", "GOOGL", "AMZN", "META", "TSLA"]
-        }
-      ]
+      "watchlists": []
     },
     "ossinsight": {
       "enabled": false,
       "period": "past_24_hours",
       "languages": ["All", "Python", "TypeScript"],
       "keywords": [],
-      "min_stars": 10,
-      "max_items": 30
+      "min_stars": 50,
+      "max_items": 20
     }
   },
   "filtering": {
-    "ai_score_threshold": 6.0,
+    "ai_score_threshold": 6.5,
     "time_window_hours": 24,
-    "max_items": null,
-    "category_groups": {},
+    "max_items": 12,
+    "category_groups": {
+      "ai": {
+        "limit": 6,
+        "categories": ["ai-news", "ai-tools", "machine-learning"]
+      },
+      "engineering": {
+        "limit": 4,
+        "categories": ["software-engineering", "dev-tools"]
+      }
+    },
     "default_group": "other",
-    "default_group_limit": null
+    "default_group_limit": 2
   },
   "webhook": {
     "enabled": false,
@@ -127,35 +164,7 @@
     "fallback_layout": "markdown",
     "languages": null,
     "request_body": {
-      "msg_type": "interactive",
-      "card": {
-        "schema": "2.0",
-        "config": {
-          "wide_screen_mode": true
-        },
-        "header": {
-          "title": {
-            "tag": "plain_text",
-            "content": "#{message_title}"
-          },
-          "template": "blue"
-        },
-        "body": {
-          "elements": [
-            {
-              "tag": "markdown",
-              "content": "Horizon生成结果: #{result}\nHorizon日报重要资讯数量: #{important_items}/#{all_items}"
-            },
-            {
-              "tag": "hr"
-            },
-            {
-              "tag": "markdown",
-              "content": "#{summary}"
-            }
-          ]
-        }
-      }
+      "text": "#{message_title}\n#{summary}"
     },
     "headers": ""
   }
