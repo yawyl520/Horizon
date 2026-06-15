@@ -1,6 +1,6 @@
 theme: jekyll-theme-cayman
-title: Materials Frontier Daily
-description: AI-curated daily digest of frontier materials research
+title: Horizon Daily
+description: AI-curated daily digest of tech and research news
 baseurl: "/Horizon" # the subpath of your site, e.g. /blog
 url: "https://yawyl520.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 

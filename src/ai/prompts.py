@@ -51,10 +51,10 @@ Score content on a 0-10 scale based on importance and relevance:
 - Trivial updates
 
 Consider:
-- Scientific depth, novelty, and reproducibility
-- Potential impact on materials science, nanoscience, energy materials, quantum materials, soft matter, and computational materials research
-- Quality of evidence, methods, characterization, and presentation
-- Relevance to frontier research rather than routine publication volume
+- Technical depth and novelty
+- Potential impact on the field
+- Quality of writing/presentation
+- Relevance to software engineering, AI/ML, and systems research
 - Community discussion quality: insightful comments, diverse viewpoints, and debates increase value
 - Engagement signals: high upvotes/favorites with substantive discussion indicate community-validated importance
 """
@@ -81,10 +81,10 @@ Respond with valid JSON only:
   "tags": ["<tag1>", "<tag2>", ...]
 }}"""
 
-CONCEPT_EXTRACTION_SYSTEM = """You identify scientific or technical concepts in materials research that a reader might not know.
+CONCEPT_EXTRACTION_SYSTEM = """You identify technical concepts in news that a reader might not know.
 Given a news item, return 1-3 search queries for concepts that need explanation.
-Focus on: specific material classes, synthesis or characterization methods, computational methods, mechanisms, tools, or datasets that are not widely known.
-Do NOT return queries for well-known things (e.g. "graphene", "DFT", "Nature").
+Focus on: specific technologies, protocols, algorithms, tools, or projects that are not widely known.
+Do NOT return queries for well-known things (e.g. "Python", "Linux", "Google").
 If the news is self-explanatory, return an empty list."""
 
 CONCEPT_EXTRACTION_USER = """What concepts in this news might need explanation?
@@ -99,7 +99,7 @@ Respond with valid JSON only:
   "queries": ["<search query 1>", "<search query 2>"]
 }}"""
 
-CONTENT_ENRICHMENT_SYSTEM = """You are a knowledgeable materials-science research analyst who helps readers understand important papers and research news in context.
+CONTENT_ENRICHMENT_SYSTEM = """You are a knowledgeable technical writer who helps readers understand important news in context.
 
 Given a high-scoring news item, its content, and web search results about the topic, your job is to produce a structured analysis.
 
@@ -118,7 +118,7 @@ Field definitions:
 
 2. **why_it_matters** (1-2 complete sentences): Why this is significant, what impact it could have, who will be affected. Connect to the broader ecosystem or industry trends.
 
-3. **key_details** (1-2 complete sentences): Notable scientific details, limitations, caveats, methods, material systems, performance metrics, or additional context worth knowing. Include specifics that a technically minded researcher would find valuable.
+3. **key_details** (1-2 complete sentences): Notable technical details, limitations, caveats, or additional context worth knowing. Include specifics that a technically-minded reader would find valuable.
 
 4. **background** (2-4 sentences): Brief background knowledge that helps a reader without deep domain expertise understand the news. Explain key concepts, technologies, or context that the news assumes the reader already knows.
 
