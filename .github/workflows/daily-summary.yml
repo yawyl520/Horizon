@@ -1,8 +1,6 @@
 name: Daily Horizon Summary
 
 on:
-  schedule:
-    - cron: '0 0 * * *'  # Runs every day at 08:00 Asia/Shanghai
   workflow_dispatch:      # Allow manual trigger
 
 jobs:
